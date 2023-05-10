@@ -18,26 +18,15 @@ RUN apt-get update -y && \
     libcfitsio-dev \
     pgplot5 \
     swig \
-    python3 \
     python3-dev \
     python3-pip \
-    libfftw3-3 \
-    libfftw3-bin \
     libfftw3-dev \
-    libfftw3-single3 \
     libx11-dev \
     libpng-dev \
-    libpng16-16 \
-    libhdf5-103 \
-    libhdf5-cpp-103 \
     libhdf5-dev \
-    libhdf5-serial-dev \
-    libxml2 \
     libxml2-dev \
     libltdl-dev \
-    gsl-bin \
     libgsl-dev \
-    libgsl27 \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get -y clean
 
