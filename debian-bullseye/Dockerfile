@@ -2,19 +2,15 @@ FROM debian:bullseye
 
 # Install dependencies (non-free needed for PGPLOT)
 RUN sed -i "/^deb.*bullseye / s/$/ non-free/" /etc/apt/sources.list
-RUN apt-get update -y && \
-    apt-get --no-install-recommends -y install \
-    build-essential \
-    autoconf \
-    autotools-dev \
-    automake \
-    autogen \
-    libtool \
-    pkg-config \
-    csh \
-    gcc \
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
+    g++ \
     gfortran \
-    wget \
+    autoconf \
+    automake \
+    libtool \
+    libltdl-dev \
+    make \
+    pkg-config \
     git \
     libcfitsio-dev \
     pgplot5 \
@@ -25,7 +21,6 @@ RUN apt-get update -y && \
     libx11-dev \
     libpng-dev \
     libhdf5-dev \
-    libltdl-dev \
     libgsl-dev \
     && rm -rf /var/lib/apt/lists/* \
     && apt-get -y clean
