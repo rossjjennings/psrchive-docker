@@ -25,7 +25,6 @@ RUN apt-get update -y && \
     libx11-dev \
     libpng-dev \
     libhdf5-dev \
-    libxml2-dev \
     libltdl-dev \
     libgsl-dev \
     && rm -rf /var/lib/apt/lists/* \
@@ -55,7 +54,6 @@ ENV PATH $PATH:$PSRHOME/tempo2/T2runtime/bin
 ENV C_INCLUDE_PATH $C_INCLUDE_PATH:$PSRHOME/tempo2/T2runtime/include
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$PSRHOME/tempo2/T2runtime/lib
 WORKDIR $PSRHOME/tempo2
-RUN sync && perl -pi -e 's/chmod \+x/#chmod +x/' bootstrap # Get rid of: returned a non-zero code: 126.
 RUN ./bootstrap && \
     ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static --with-pic F77=gfortran && \
     make -j $(nproc) && \
@@ -77,5 +75,3 @@ RUN ./bootstrap && \
     make install && \
     rm -rf .git
 WORKDIR $PSRHOME
-
-WORKDIR /scripts/
