@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:bullseye AS build
 
 # Install dependencies (non-free needed for PGPLOT)
 RUN sed -i "/^deb.*bullseye / s/$/ non-free/" /etc/apt/sources.list
@@ -54,6 +54,30 @@ RUN ./bootstrap && \
     make -j $(nproc) && \
     make && \
     make install
+
+FROM debian:bullseye AS deploy
+
+# Install dependencies again (but only the runtime versions)
+RUN sed -i "/^deb.*bullseye / s/$/ non-free/" /etc/apt/sources.list
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
+    libcfitsio9 \
+    pgplot5 \
+    python3-dev \
+    libfftw3-single3 \
+    libx11-6 \
+    libpng16-16 \
+    libhdf5-103-1 \
+    libgsl25 \
+    libgslcblas0
+
+COPY --from=build /usr/local/ /usr/local/
+
+ENV PGPLOT_DIR="/usr/lib/pgplot5"
+ENV PGPLOT_FONT="/usr/lib/pgplot5/grfont.dat"
+ENV PGPLOT_INCLUDES="/usr/include"
+ENV PGPLOT_BACKGROUND="white"
+ENV PGPLOT_FOREGROUND="black"
+ENV PGPLOT_DEV="/xs"
 
 ENV LD_LIBRARY_PATH="/usr/local/lib"
 ENV PYTHONPATH="/usr/local/lib/python3.9/site-packages"
