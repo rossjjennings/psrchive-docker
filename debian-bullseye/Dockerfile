@@ -36,7 +36,8 @@ ENV PGPLOT_FOREGROUND="black"
 ENV PGPLOT_DEV="/xs"
 
 # tempo2
-RUN git clone https://bitbucket.org/psrsoft/tempo2.git
+WORKDIR /root
+RUN git clone --depth=1 https://bitbucket.org/psrsoft/tempo2.git
 WORKDIR tempo2
 RUN ./bootstrap && \
     ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static --with-pic F77=gfortran && \
@@ -47,7 +48,8 @@ ENV TEMPO2 /usr/local/share/tempo2
 RUN cp -r T2runtime $TEMPO2
 
 # PSRCHIVE
-RUN git clone git://git.code.sf.net/p/psrchive/code psrchive
+WORKDIR /root
+RUN git clone --depth=1 git://git.code.sf.net/p/psrchive/code psrchive
 WORKDIR psrchive
 RUN ./bootstrap && \
     ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static F77=gfortran && \
