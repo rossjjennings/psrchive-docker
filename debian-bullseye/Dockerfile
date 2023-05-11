@@ -24,8 +24,8 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libgsl-dev \
     && apt-get clean -y
 
-# Install python packages
-RUN pip install numpy scipy matplotlib
+# Install Numpy
+RUN pip install numpy
 
 # PGPLOT
 ENV PGPLOT_DIR="/usr/lib/pgplot5"
@@ -65,6 +65,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libcfitsio9 \
     pgplot5 \
     python3-dev \
+    python3-pip \
     python-is-python3 \
     libfftw3-single3 \
     libx11-6 \
@@ -72,6 +73,9 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libhdf5-103-1 \
     libgsl25 \
     libgslcblas0
+
+# Install relevant Python packages
+RUN pip install numpy scipy matplotlib astropy
 
 COPY --from=build /usr/local/ /usr/local/
 
