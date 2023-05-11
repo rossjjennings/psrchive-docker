@@ -22,18 +22,18 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libpng-dev \
     libhdf5-dev \
     libgsl-dev \
-    && apt-get -y clean
+    && apt-get clean -y
 
 # Install python packages
 RUN pip install numpy scipy matplotlib
 
 # PGPLOT
-ENV PGPLOT_DIR /usr/lib/pgplot5
-ENV PGPLOT_FONT /usr/lib/pgplot5/grfont.dat
-ENV PGPLOT_INCLUDES /usr/include
-ENV PGPLOT_BACKGROUND white
-ENV PGPLOT_FOREGROUND black
-ENV PGPLOT_DEV /xs
+ENV PGPLOT_DIR="/usr/lib/pgplot5"
+ENV PGPLOT_FONT="/usr/lib/pgplot5/grfont.dat"
+ENV PGPLOT_INCLUDES="/usr/include"
+ENV PGPLOT_BACKGROUND="white"
+ENV PGPLOT_FOREGROUND="black"
+ENV PGPLOT_DEV="/xs"
 
 # tempo2
 RUN git clone https://bitbucket.org/psrsoft/tempo2.git
