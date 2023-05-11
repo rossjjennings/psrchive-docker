@@ -63,6 +63,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libcfitsio9 \
     pgplot5 \
     python3-dev \
+    python-is-python3 \
     libfftw3-single3 \
     libx11-6 \
     libpng16-16 \
