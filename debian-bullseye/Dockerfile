@@ -36,37 +36,26 @@ ENV PGPLOT_BACKGROUND white
 ENV PGPLOT_FOREGROUND black
 ENV PGPLOT_DEV /xs
 
-ENV PSRHOME /software/
-WORKDIR $PSRHOME 
-
-# Pull all repos
-RUN git clone https://bitbucket.org/psrsoft/tempo2.git && \
-    git clone git://git.code.sf.net/p/psrchive/code psrchive
-
 # tempo2
-ENV TEMPO2 $PSRHOME/tempo2/T2runtime
-ENV PATH $PATH:$PSRHOME/tempo2/T2runtime/bin
-ENV C_INCLUDE_PATH $C_INCLUDE_PATH:$PSRHOME/tempo2/T2runtime/include
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$PSRHOME/tempo2/T2runtime/lib
-WORKDIR $PSRHOME/tempo2
+RUN git clone https://bitbucket.org/psrsoft/tempo2.git
+WORKDIR tempo2
 RUN ./bootstrap && \
     ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static --with-pic F77=gfortran && \
     make -j $(nproc) && \
     make install && \
-    make plugins-install && \
-    rm -rf .git
+    make plugins-install
+ENV TEMPO2 /usr/local/share/tempo2
+RUN cp -r T2runtime $TEMPO2
 
 # PSRCHIVE
-ENV PSRCHIVE $PSRHOME/psrchive
-ENV PATH $PATH:$PSRCHIVE/install/bin
-ENV C_INCLUDE_PATH $C_INCLUDE_PATH:$PSRCHIVE/install/include
-ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:$PSRCHIVE/install/lib
-ENV PYTHONPATH $PSRCHIVE/install/lib/python3.9/site-packages
-WORKDIR $PSRCHIVE
+RUN git clone git://git.code.sf.net/p/psrchive/code psrchive
+WORKDIR psrchive
 RUN ./bootstrap && \
-    ./configure --prefix=$PSRCHIVE/install --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static F77=gfortran && \
+    ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static F77=gfortran && \
     make -j $(nproc) && \
     make && \
-    make install && \
-    rm -rf .git
-WORKDIR $PSRHOME
+    make install
+
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+ENV PYTHONPATH="/usr/local/lib/python3.9/site-packages"
+WORKDIR $HOME
