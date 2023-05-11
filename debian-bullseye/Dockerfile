@@ -40,7 +40,7 @@ WORKDIR /root
 RUN git clone --depth=1 https://bitbucket.org/psrsoft/tempo2.git
 WORKDIR tempo2
 RUN ./bootstrap && \
-    ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static --with-pic F77=gfortran && \
+    ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static F77=gfortran && \
     make -j $(nproc) && \
     make install && \
     make plugins-install
