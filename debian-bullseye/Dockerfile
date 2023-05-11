@@ -22,7 +22,6 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libpng-dev \
     libhdf5-dev \
     libgsl-dev \
-    && rm -rf /var/lib/apt/lists/* \
     && apt-get -y clean
 
 # Install python packages
@@ -58,4 +57,4 @@ RUN ./bootstrap && \
 
 ENV LD_LIBRARY_PATH="/usr/local/lib"
 ENV PYTHONPATH="/usr/local/lib/python3.9/site-packages"
-WORKDIR $HOME
+WORKDIR /root
