@@ -35,7 +35,23 @@ ENV PGPLOT_BACKGROUND="white"
 ENV PGPLOT_FOREGROUND="black"
 ENV PGPLOT_DEV="/xs"
 
-# tempo2
+# TEMPO
+WORKDIR /root
+RUN git clone https://git.code.sf.net/p/tempo/tempo
+WORKDIR tempo
+RUN autoreconf --install && \
+    ./configure && \
+    make && \
+    make install
+ENV TEMPO="/usr/local/share/tempo"
+RUN mkdir $TEMPO && \
+    cp -r clock $TEMPO/ && \
+    cp -r ephem $TEMPO/ && \
+    cp obsys.dat $TEMPO/ && \
+    cp tempo.cfg $TEMPO/ && \
+    cp tempo.hlp $TEMPO/
+
+# Tempo2
 WORKDIR /root
 RUN git clone --depth=1 https://bitbucket.org/psrsoft/tempo2.git
 WORKDIR tempo2
@@ -44,12 +60,12 @@ RUN ./bootstrap && \
     make -j $(nproc) && \
     make install && \
     make plugins-install
-ENV TEMPO2 /usr/local/share/tempo2
+ENV TEMPO2="/usr/local/share/tempo2"
 RUN cp -r T2runtime $TEMPO2
 
 # PSRCHIVE
 WORKDIR /root
-RUN git clone --depth=1 git://git.code.sf.net/p/psrchive/code psrchive
+RUN git clone --depth=1 https://git.code.sf.net/p/psrchive/code psrchive
 WORKDIR psrchive
 RUN ./bootstrap && \
     ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static F77=gfortran && \
@@ -85,6 +101,9 @@ ENV PGPLOT_INCLUDES="/usr/include"
 ENV PGPLOT_BACKGROUND="white"
 ENV PGPLOT_FOREGROUND="black"
 ENV PGPLOT_DEV="/xs"
+
+ENV TEMPO="/usr/local/share/tempo"
+ENV TEMPO2="/usr/local/share/tempo2"
 
 ENV LD_LIBRARY_PATH="/usr/local/lib"
 ENV PYTHONPATH="/usr/local/lib/python3.9/site-packages"
