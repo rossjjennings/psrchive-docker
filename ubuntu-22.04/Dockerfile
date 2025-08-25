@@ -37,7 +37,7 @@ ENV PGPLOT_DEV="/xs"
 # TEMPO
 WORKDIR /root
 RUN git clone https://git.code.sf.net/p/tempo/tempo
-WORKDIR tempo
+WORKDIR /root/tempo
 RUN autoreconf --install && \
     ./configure && \
     make && \
@@ -53,7 +53,7 @@ RUN mkdir $TEMPO && \
 # Tempo2
 WORKDIR /root
 RUN git clone --depth=1 https://bitbucket.org/psrsoft/tempo2.git
-WORKDIR tempo2
+WORKDIR /root/tempo2
 RUN ./bootstrap && \
     ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static F77=gfortran && \
     make -j $(nproc) && \
@@ -65,7 +65,7 @@ RUN cp -r T2runtime $TEMPO2
 # PSRCHIVE
 WORKDIR /root
 RUN git clone --depth=1 https://git.code.sf.net/p/psrchive/code psrchive
-WORKDIR psrchive
+WORKDIR /root/psrchive
 RUN ./bootstrap && \
     ./configure --x-libraries=/usr/lib/x86_64-linux-gnu --enable-shared --enable-static F77=gfortran && \
     make -j $(nproc) && \
@@ -86,7 +86,8 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libpng16-16 \
     libhdf5-103-1 \
     libgsl27 \
-    libgslcblas0
+    libgslcblas0 \
+    && apt-get clean -y
 
 # Install relevant Python packages
 RUN pip install numpy scipy matplotlib astropy
